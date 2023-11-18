@@ -1,165 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(to right, rgb(42, 40, 101) 0%, rgb(22, 17, 161) 100%);
+    }
 
-        body{
-            background-image: url(./depositphotos_7670380-stock-photo-numbers-background-dark-blue.jpg);
-            background-repeat: no-repeat;
-            background-size: 100%;
-        }
-        /* Basic styling for the calculator */
-        .Calculator {
-            min-width: 500px;
-            margin: 0 7%;
-            padding: 20px;
-            background-color: #232323;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            font-family: 'LCDFont', sans-serif;
-            position: absolute;
-            top: 16%;
-        }
+    #calculator {
+      background: linear-gradient(to right, rgb(20, 16, 82) 0%,rgb(23, 23, 30) 100%);
+      /* background-color: rgba(255, 255, 255, 0.8); */
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
 
-        #display {
-            width: 100%;
-            height: 60px;
-            font-size: 24px;
-            text-align: right;
-            margin-bottom: 10px;
-            background-color: #949494;
-        }
+    input {
+      width: 90%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 18px;
+    }
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
+    button {
+      width: 48px;
+      height: 48px;
+      font-size: 18px;
+      margin: 5px;
+      cursor: pointer;
+    }
 
-        button {
-            width: 100%;
-            height: 80px;
-            font-size: 20px;
-            background-color: #585858;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-        #heading {
-            color: white;
-            margin: 0 20%;
-            position: absolute;
-            top: 7%;
-            
-        }
-    </style>
+    #equals {
+      width: 100%;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="outbox">
-            <h1 id="heading">Calculator</h1>
-        <div class="Calculator">
-            <input type="text" id="display" readonly>
-            <div class="buttons">
-                <button onclick="ClearDisplay()">AC</button>
-                <button onclick="calculateSquareRoot()">√</button>
-                <button onclick="calculatePercentage()">&#37;</button>
-                <button onclick="backspace()">&#9003;</button>
-                <button onclick="AppendToDisplay('7')">7</button>
-                <button onclick="AppendToDisplay('8')">8</button>
-                <button onclick="AppendToDisplay('9')">9</button>
-                <button onclick="AppendToDisplay('/')">/</button>
-                <button onclick="AppendToDisplay('4')">4</button>
-                <button onclick="AppendToDisplay('5')">5</button>
-                <button onclick="AppendToDisplay('6')">6</button>
-                <button onclick="AppendToDisplay('*')">*</button>
-                <button onclick="AppendToDisplay('3')">3</button>
-                <button onclick="AppendToDisplay('1')">1</button>
-                <button onclick="AppendToDisplay('2')">2</button>
-                <button onclick="AppendToDisplay('-')">-</button>
-                <button onclick="AppendToDisplay('.')">.</button>
-                <button onclick="AppendToDisplay('0')">0</button>
-                <button onclick="CalculateResult()">=</button>
-                <button onclick="AppendToDisplay('+')">+</button>
-            </div>
-        </div>
-    </div>
-    <script>
-        let currentInput = '';
+  <div id="calculator">
+    <input type="text" id="display" disabled>
+    <br>
+    <button onclick="appendCharacter('7')">7</button>
+    <button onclick="appendCharacter('8')">8</button>
+    <button onclick="appendCharacter('9')">9</button>
+    <button onclick="setOperator('/')">/</button>
+    <br>
+    <button onclick="appendCharacter('4')">4</button>
+    <button onclick="appendCharacter('5')">5</button>
+    <button onclick="appendCharacter('6')">6</button>
+    <button onclick="setOperator('*')">*</button>
+    <br>
+    <button onclick="appendCharacter('1')">1</button>
+    <button onclick="appendCharacter('2')">2</button>
+    <button onclick="appendCharacter('3')">3</button>
+    <button onclick="setOperator('-')">-</button>
+    <br>
+    <button onclick="appendCharacter('0')">0</button>
+    <button onclick="appendCharacter('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="setOperator('+')">+</button>
+    <br>
+    <button onclick="clearDisplay()">C</button>
+  </div>
 
-        function AppendToDisplay(value) {
-            currentInput += value;
-            document.getElementById('display').value = currentInput;
-        }
+  <script>
+    let display = document.getElementById('display');
+    let currentInput = '';
 
-        function ClearDisplay() {
-            currentInput = '';
-            document.getElementById('display').value = currentInput;
-        }
+    function appendCharacter(character) {
+      currentInput += character;
+      display.value = currentInput;
+    }
 
-        function CalculateResult() {
-            try {
-                const Result = eval(currentInput);
-                document.getElementById('display').value = Result;
-                currentInput = Result.toString();
-            } catch (error) {
-                document.getElementById('display').value = 'error';
-                currentInput = '';
-            }
-        }
+    function setOperator(operator) {
+      currentInput += ` ${operator} `;
+      display.value = currentInput;
+    }
 
-        function backspace() {
-            const display = document.getElementById('display');
-            currentInput = display.value = display.value.slice(0, -1);
+    function calculate() {
+      try {
+        currentInput = eval(currentInput);
+        display.value = currentInput;
+      } catch (error) {
+        display.value = 'Error';
+      }
+    }
 
-        }
-
-        function calculatePercentage() {
-            const display = document.getElementById("display");
-            try {
-                const result = eval(display.value);
-                currentInput = display.value = (result / 100).toString();
-            } catch (error) {
-                display.value = "Error";
-            }
-        }
-
-        function calculateSquareRoot() {
-            const display = document.getElementById("display");
-            try {
-                const number = parseFloat(display.value);
-                if (!isNaN(number) && number >= 0) {
-                    currentInput = display.value = Math.sqrt(number).toString();
-                } else {
-                    display.value = "Error";
-                }
-            } catch (error) {
-                display.value = "Error";
-            }
-        }
-
-
-        document.addEventListener("keypress", function (event) {
-            const key = event.key;
-            if (/[\d+\-*/.]/.test(key)) {
-                AppendToDisplay(key);
-            } else if (key === "Enter" || key === "=" || key === " ") {
-                CalculateResult();
-            } else if (key === "Backspace" || key === "C" || key === "c" || key === "Delete") {
-                backspace();
-            }
-        });
-    </script>
+    function clearDisplay() {
+      currentInput = '';
+      display.value = '';
+    }
+  </script>
 </body>
-
 </html>
